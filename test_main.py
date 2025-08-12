@@ -9,7 +9,7 @@ client = TestClient(app)
 def test_read_root():
     response = client.get("/")  # Call the root endpoint
     assert response.status_code == 200  # Check status is OK
-    assert response.json() == {"message": "Tesla Diagnostic API running"}  # Check exact output
+    assert response.json() == {"Message": "Tesla Diagnostic API running"}  # Check exact output
 
 # Test the vehicle status endpoint
 def test_vehicle_status():
