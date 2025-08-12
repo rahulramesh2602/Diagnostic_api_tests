@@ -1,4 +1,4 @@
-name: CI
+name: CI + Build Docker Image
 
 # When to run the workflow
 on:
@@ -26,3 +26,18 @@ jobs:
 
       - name: Run tests
         run: pytest -v
+
+  build-and-push:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Log in to GitHub Container Registry
+        run: echo "${{ secrets.GHCR_PAT }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+
+      - name: Build and push Docker image
+        run: |
+          IMAGE_NAME=ghcr.io/${{ github.repository_owner }}/tesla-diagnostic-api:latest
+          docker build -t $IMAGE_NAME .
+          docker push $IMAGE_NAME
